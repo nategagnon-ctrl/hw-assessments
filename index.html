@@ -89,6 +89,9 @@ svg.edit-ic{width:11px;height:11px;display:block}
 .kpi-strip-lbl{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em}
 .kpi-strip-val{font-size:22px;font-weight:700;color:var(--tx);letter-spacing:-.5px;line-height:1;font-family:'DM Mono',monospace}
 .kpi-strip-divider{width:1px;height:28px;background:var(--brd);margin:0 4px}
+.kpi-link{font-size:11px;font-weight:600;color:var(--blue);cursor:pointer;transition:all .15s;white-space:nowrap;padding:3px 0;border-bottom:1px solid transparent}
+.kpi-link:hover{color:var(--blue-dk);border-bottom-color:var(--blue-dk)}
+.kpi-link.copied{color:var(--green);border-bottom-color:var(--green)}
 
 /* Row 1: payor + packages 50/50 */
 .d2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
@@ -433,6 +436,12 @@ svg.edit-ic{width:11px;height:11px;display:block}
           <div class="kpi-strip-val" id="h-tot">0</div>
           <div class="kpi-strip-divider"></div>
           <div style="font-size:10px;color:var(--tx3)">Assessments CRM workspace</div>
+          <div class="kpi-strip-divider"></div>
+          <div style="display:flex;align-items:center;gap:16px;margin-left:4px">
+            <span class="kpi-link" onclick="cpKpiLink('https://app2.highwire.com/signin',this)" title="Click to copy link">Sign in</span>
+            <span class="kpi-link" onclick="cpKpiLink('https://help.highwire.com/hc/en-us',this)" title="Click to copy link">Help Center</span>
+            <span class="kpi-link" onclick="cpKpiLink('https://network.highwire.com/',this)" title="Click to copy link">Network</span>
+          </div>
         </div>
 
         <!-- Payor + Packages 50/50 -->
@@ -695,6 +704,21 @@ const MONTHS=['January','February','March','April','May','June','July','August',
 const TCOLS=['#4361ee','#16a34a','#7c3aed','#d97706','#dc2626'];
 var selTeamClr=TCOLS[0];
 
+function cpKpiLink(url,el){
+  navigator.clipboard.writeText(url).then(function(){
+    var orig=el.textContent;
+    el.classList.add('copied');
+    el.textContent='Copied!';
+    setTimeout(function(){el.classList.remove('copied');el.textContent=orig;},1500);
+  }).catch(function(){
+    var ta=document.createElement('textarea');
+    ta.value=url;document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');document.body.removeChild(ta);
+    var orig=el.textContent;
+    el.classList.add('copied');el.textContent='Copied!';
+    setTimeout(function(){el.classList.remove('copied');el.textContent=orig;},1500);
+  });
+}
 function cpText(t,btn){navigator.clipboard.writeText(t).then(function(){var o=btn.innerHTML;btn.innerHTML='<svg viewBox="0 0 16 16" fill="currentColor" style="width:9px;height:9px"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg>Copied';btn.classList.add('ok');setTimeout(function(){btn.innerHTML=o;btn.classList.remove('ok');},1800);}).catch(function(){});}
 function lsLoad(){try{var d=localStorage.getItem('acrm_v8');if(d){var s=JSON.parse(d);clients=s.clients||[];mapNotes=s.notes||{};faqGroups=s.faqGroups||[];faqItems=s.faqItems||[];prRows=s.pricingRows||{};specialists=s.specialists||[];assessData=s.assessData||JSON.parse(JSON.stringify(DAD));if(s.teams&&s.teams.length)teams=s.teams;if(s.calChips)calChips=s.calChips;if(s.links)links=Object.assign({},links,s.links);}else assessData=JSON.parse(JSON.stringify(DAD));}catch(e){assessData=JSON.parse(JSON.stringify(DAD));}}
 function lsSave(){try{localStorage.setItem('acrm_v8',JSON.stringify({clients,notes:mapNotes,faqGroups,faqItems,pricingRows:prRows,specialists,assessData,teams,calChips,links}));}catch(e){}}
