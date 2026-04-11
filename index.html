@@ -756,7 +756,7 @@ grid.innerHTML=list.map(function(c){
   var pkgHtml=c.pkg?'<span class="tag" style="'+PKG_T[c.pkg]+'">'+esc(c.pkg)+'</span>':'';
   var payHtml=c.pay?'<span class="tag" style="'+PAY_T[c.pay]+'">'+esc(c.pay)+'</span>':'';
   var indHtml=c.industry?'<span class="tag" style="background:var(--surf2);color:var(--tx2)">'+esc(c.industry)+'</span>':'';
-  return '<div class="ccard" onclick="openProf(''+c.id+'')">'
+  return '<div class="ccard" onclick="openProf(\'+c.id+'\')"> '
     +'<div class="ccard-accent" style="background:'+accent+'"></div>'
     +'<div class="ccard-body">'
       +'<div class="ccard-top">'
